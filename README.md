@@ -1,4 +1,4 @@
-# OX Interview — POC Security Scanner
+# OX Interview - POC Security Scanner
 
 ## Main Features
 
@@ -29,6 +29,4 @@ I primarily used Codex Sol 6.1, with Claude Sonnet for review and a second opini
 1. Research competitors.
 2. Brainstorm the features and design I wanted.
 3. Write PRODUCT_SPEC.txt, followed by TECH_SPEC.txt, and decide on storage and other major technical decisions.
-4. Implement the app after I had approved the critical happy path.
-
-This document was written by me, not by an LLM.
+4. Implement the app after I had approved the critical happy path
