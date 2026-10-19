@@ -6,6 +6,8 @@ The app asynchronously scans a GitHub repository. Each scan is saved in a Neon P
 
 The scanner currently checks a predefined set of common problems in Node.js applications and uses OSV to check dependencies in the lockfile.
 
+I tried to make it as helpful as possible with action grouping and simple report scheama, that will allow user to look at a fixed summary, and keep it seperate from "words" kind of analisys. It's more than a simple scanner API in the way its impld too- you can know how much of a scan has been done, its completly transparent,and for each scan see what the results are.
+
 Each component—ReportBuilder, Scanner, RepositoryReader, and others, impls an interface, allowing different implementations to be swapped in easily once written. For example, we might want different flows for an engineer, a SOC team member, and a CISO.
 
 ## API and Clients
@@ -14,11 +16,13 @@ The app is designed to allow different clients to connect to and use the API, in
 
 Each client could be a wrapper around the API, which would also remain directly accessible.
 
-## Report Storage
+## Report
 
 Reports are saved as immutable JSONB documents in PostgreSQL to support different kinds of reports for different users, such as premium and free tiers, and changes to report schemas over time.
 
 I view a report as a document, similar to one in a document database, and do not want to enforce a uniform structure across all reports. In contrast, scans and repositories have fixed structures in this design.
+
+Even the basic report will allow you to **make a desicion** faster about what's needed to be done, by grouping problems that are related to the same dep.
 
 ## Use of LLMs
 
