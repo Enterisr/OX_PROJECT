@@ -34,3 +34,26 @@ I primarily used Codex Sol 6.1, with Claude Sonnet for review and a second opini
 2. Brainstorm the features and design I wanted.
 3. Write PRODUCT_SPEC.txt, followed by TECH_SPEC.txt, and decide on storage and other major technical decisions.
 4. Implement the app after I had approved the critical happy path
+
+## Tests
+
+There is one intergration test and a few unit tests to check for common edge cases. For a prod env I would have done more unit tests.
+
+## Run
+
+Requires Node.js 22+ and a PostgreSQL database, either local or hosted.
+
+1. Install dependencies: `npm ci`.
+2. Create a `.env` file in the project root. Set `DATABASE_URL` to your Neon connection string or a local PostgreSQL connection string:
+
+   ```env
+   # Local PostgreSQL
+   DATABASE_URL=postgresql://user:password@localhost:5432/security_scan
+
+   # Or Neon: use the connection string from your Neon project
+   # DATABASE_URL=postgresql://user:password@your-endpoint.neon.tech/database?sslmode=require
+   ```
+
+3. Create the tables: `npm run db:setup`.
+4. Start the app: `npm run dev`.
+5. Open http://127.0.0.1:3000 in your browser.
