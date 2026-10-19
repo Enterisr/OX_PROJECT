@@ -1,0 +1,16 @@
+.git/
+.agents/
+.codex/
+.vscode/
+.npm-cache/
+node_modules/
+dist/
+.env
+.env.*
+*.log
+*.pdf
+test/
+README.md
+PRODUCT_SPEC.txt
+TECH_SPEC.txt
+skills-lock.json

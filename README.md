@@ -16,6 +16,20 @@ The app is designed to allow different clients to connect to and use the API, in
 
 Each client could be a wrapper around the API, which would also remain directly accessible.
 
+### API
+
+Base URL: https://ox-security-scanner-production.up.railway.app
+
+```http
+POST /scans
+Content-Type: application/json
+
+{"repositoryUrl":"https://github.com/owner/repo"}
+
+GET /scans/{scanId}
+GET /scans/{scanId}/results
+```
+
 ## Report
 
 Reports are saved as immutable JSONB documents in PostgreSQL to support different kinds of reports for different users, such as premium and free tiers, and changes to report schemas over time.
