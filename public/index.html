@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security Scan Review</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><h1><a href="/">Security scan</a></h1><span class="badge">Basic source scan · POC</span></header>
+    <section id="start" aria-label="New scan">
+      <form id="scan-form" novalidate aria-busy="false">
+        <label for="repository-url" class="sr-only">Public GitHub repository URL</label>
+        <div class="input-row">
+          <input id="repository-url" name="repositoryUrl" type="url" placeholder="https://github.com/owner/repo" required maxlength="2048" autocomplete="url" spellcheck="false" aria-describedby="repository-feedback">
+          <button type="submit" id="submit"><span id="submit-spinner" class="spinner" aria-hidden="true" hidden></span><span id="submit-label">Scan</span></button>
+        </div>
+        <p id="repository-feedback" class="field-error" aria-live="polite" hidden></p>
+      </form>
+    </section>
+    <section id="scan" hidden aria-labelledby="scan-heading" aria-busy="false">
+      <div class="scan-heading">
+        <h2 id="scan-heading" tabindex="-1" role="status">Loading…</h2>
+        <div class="actions"><button id="copy-link" class="secondary" type="button">Copy link</button><a href="/" class="button-link secondary">New scan</a></div>
+      </div>
+      <p id="repository" class="repository"></p>
+      <p id="copy-feedback" class="muted" role="status" hidden></p>
+      <input id="scan-link" type="text" readonly aria-label="Scan link" hidden>
+      <div id="progress-panel">
+        <div class="progress-label"><span id="stage">Loading…</span><span id="percent">—</span></div>
+        <progress id="progress" max="100" aria-label="Scan progress"></progress>
+      </div>
+      <section id="results" hidden aria-label="Scan results">
+        <p id="source-summary" class="muted" hidden></p>
+        <div id="summary" class="summary"></div>
+        <p id="analysis"></p>
+        <div id="findings"></div>
+      </section>
+    </section>
+    <div id="error" class="error" role="alert" hidden><p id="error-message"></p><button id="retry" class="secondary" type="button" hidden>Retry</button></div>
+    <noscript><p class="error">JavaScript is required.</p></noscript>
+  </main>
+</body>
+</html>

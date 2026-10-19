@@ -1,0 +1,93 @@
+# AI Security Scan Review — Product Specification
+
+**Version:** 1.0 | **Scope:** MVP
+
+## 1. Product Overview
+
+A developer-first security scanning platform that helps engineering teams identify, understand, and prioritize security risks in GitHub repositories.
+
+The platform transforms raw scanner findings into actionable security reviews, answering three questions:
+
+- **What matters?** Which findings should be prioritized?
+- **Why?** What makes these findings risky?
+- **What's next?** Which actions should developers take?
+
+The product is API-first and CI-friendly, with a lightweight Web UI for interactive reviews.
+
+## 2. Architecture & Scan Lifecycle
+
+The backend is implemented in **Node.js + TypeScript**.
+
+All scans execute asynchronously on the server, independently of client connections.
+
+**Lifecycle:** `queued → running → completed / failed`
+
+Three core endpoints:
+
+| Endpoint                 | Purpose                                 |
+| ------------------------ | --------------------------------------- |
+| `POST /scans`            | Start a scan; return `202` and `scanId` |
+| `GET /scans/:id`         | Retrieve status and progress            |
+| `GET /scans/:id/results` | Retrieve structured review results      |
+
+Scans accept a public GitHub repository URL and optional Git reference.
+
+## 3. CLI & CI Integration
+
+The CLI **waits for results by default**, polling the backend and displaying progress and a final summary.
+
+Supported modes:
+```php-template
+security-scan scan <repo-url>
+security-scan scan <repo-url> --detach
+security-scan scan <repo-url> --fail-on high
+```
+
+- **Default:** Wait for completion; findings do not fail the build.
+- **Detached:** Return immediately with a scan ID.
+- **Quality Gate:** Wait and fail CI when findings meet the configured severity threshold.
+
+Execution errors and security-policy violations use distinct exit codes. Blocking execution supports timeouts.
+
+A GitHub Actions workflow demonstrates CI integration.
+
+## 4. Security Review Engine
+
+The scanner produces structured raw findings.
+
+A separate Review Engine transforms them into:
+
+- **Security Summary:** Severity distribution and overall risk overview.
+- **Prioritized Findings:** Deterministic scoring based on severity and verified context, with explanations.
+- **Recommended Actions:** Concrete remediation steps.
+- **Action Grouping:** Combine findings addressed by the same remediation action.
+
+Scanner severity and calculated remediation priority remain separate.
+
+## 5. Web Application
+
+A lightweight Web UI provides three screens:
+
+1. **Start:** Submit a GitHub repository URL.
+2. **Progress:** Poll scan status; allow users to leave and return.
+3. **Review:** Present prioritized findings, explanations, and grouped remediation actions.
+
+The Web UI consumes the same API as the CLI.
+
+## 6. Implementation Scope
+
+**Current POC focus:** Scanning Node.js repositories, with JavaScript/TypeScript source checks and npm dependency checks. This is an internal implementation focus and is not currently declared as a repository-type restriction in the user-facing flow; broader ecosystem support is outside the current POC scope.
+
+**Included:**
+
+- Async scan orchestration and lifecycle management.
+- Deterministic mock scanner with realistic, clearly labeled findings.
+- Review scoring and action grouping.
+- CLI, CI example, and Web UI.
+- Basic validation, error handling, tests, and README.
+
+**Stretch goal:** Real dependency vulnerability detection using OSV.
+
+**Future extensions:** Organization management, authentication, Slack/email notifications, scan history, finding comparison, and LLM-assisted analysis.
+
+The MVP focuses on a complete, testable developer workflow rather than building a production-scale scanning platform.

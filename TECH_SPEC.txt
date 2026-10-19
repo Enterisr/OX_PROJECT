@@ -1,0 +1,139 @@
+AI Security Scan Review — Product & Technical Overview
+
+1. Product & Problem
+
+A developer-first security scanning platform that helps engineering teams identify, understand, and prioritize security risks in GitHub repositories.
+
+Traditional security scanners produce raw findings that can be difficult to interpret and prioritize.
+
+Our product transforms these findings into actionable security reviews, answering three questions:
+
+What matters? Which risks should be prioritized?
+
+Why? What makes them dangerous?
+
+What's next? How should developers address them?
+
+The initial target audience is software developers, with potential future expansion toward security teams and CISOs.
+
+2. High-Level Architecture
+
+The backend is built with Node.js + TypeScript, using an API-first approach.
+
+Scan lifecycle:
+
+queued → running → completed / failed
+
+The system consists of:
+
+Scanner: Produces raw security findings.
+
+Scan Orchestrator: Manages asynchronous scan execution and lifecycle.
+
+Review Engine: Analyzes findings and generates actionable reports.
+
+REST API: Exposes scans, progress, findings, and reports.
+
+CLI: Supports local development and CI integration.
+
+Web UI: Provides an interactive scan and review experience.
+
+Scanning and analysis are independent, allowing different engines to process the same findings without rerunning scans.
+
+3. Domain Model
+
+Scan
+
+Represents a scan execution.
+
+id, alias (optional or auto-generated)
+
+repositoryUrl, repositoryKey, commitSha
+
+createdAt, status (enum)
+
+result: Collection of Findings
+
+Finding
+
+Raw security issue detected by the scanner.
+
+Structured and extensible.
+
+Independent of analysis and recommendations.
+
+FindingInsight
+
+References a Finding by findingId.
+
+Contains explanations, prioritization, and recommendations.
+
+Stored within a Report.
+
+Report
+
+Immutable analysis snapshot.
+
+Multiple Reports per Scan.
+
+Supports different analysis engines and report types (e.g., Basic, Premium).
+
+Contains structured metadata and flexible analytical content.
+
+4. Data Storage
+
+PostgreSQL + JSONB
+
+Entity
+
+Storage
+
+Scan
+
+Relational
+
+Finding
+
+Relational
+
+Report
+
+Relational metadata + JSONB content
+
+FindingInsight
+
+Embedded in Report
+
+Relationships:
+
+Scan → Findings (1)
+
+Scan → Reports (1)
+
+Report → FindingInsights (embedded)
+
+A dedicated Repository entity is deferred. Initially, scans are associated through repositoryKey.
+
+5. MVP Scope
+
+Asynchronous scan execution and progress tracking.
+
+Deterministic mock scanner.
+
+Modular Review Engine with prioritization and remediation recommendations.
+
+REST API for scans and reports.
+
+Lightweight Web UI.
+
+CLI with optional CI quality gates.
+
+Basic validation, testing, and documentation.
+
+Future extensions: Real vulnerability scanning (OSV), multiple analysis engines, AI-assisted reviews, authentication, repository management, and additional report types.
+
+6. Core Architectural Principle
+
+A Scan produces Findings. Analysis engines consume Findings and generate immutable Reports.
+
+This enables reusable scan results, interchangeable analysis engines, and multiple report experiences while keeping the scanning infrastructure independent.

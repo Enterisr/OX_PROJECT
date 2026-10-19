@@ -1,0 +1,29 @@
+{
+  "name": "security-scan-review",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env --import tsx --watch src/server.ts",
+    "build": "tsc",
+    "start": "node --env-file=.env dist/server.js",
+    "db:setup": "node --env-file=.env --import tsx src/setup-db.ts",
+    "check": "tsc --noEmit && tsc -p tsconfig.test.json && node --check public/app.js",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:integration": "node --env-file=.env --import tsx --test test/integration/*.test.ts"
+  },
+  "dependencies": {
+    "fastify": "^5.0.0",
+    "pg": "^8.13.0",
+    "tar-stream": "^3.2.2",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "tsx": "^4.19.0"
+  }
+}
